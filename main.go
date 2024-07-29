@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"Telegram_bot/clients/telegram"
+	"./clients/telegram"
 )
 
 const (

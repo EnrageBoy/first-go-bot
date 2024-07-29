@@ -8,7 +8,7 @@ import (
 	"path"
 	"strconv"
 
-	"telegram_bot/lib/e"
+	"../../lib/e"
 )
 
 type Client struct {
@@ -39,7 +39,7 @@ func newBasePath(token string) string {
 func (c *Client) Update(offset, int, limit int) ([]Update, error) {
 	q := url.Values{}
 	q.Add("offset", strconv.Itoa(offset))
-	q.Add("offset", strconv.Itoa(limit))
+	q.Add("limit", strconv.Itoa(limit))
 
 	data, err := c.doRequest(getUpdatesMethod, q)
 	if err != nil {
