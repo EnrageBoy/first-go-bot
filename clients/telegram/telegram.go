@@ -8,7 +8,7 @@ import (
 	"path"
 	"strconv"
 
-	"../../lib/e"
+	"Telegram_bot/lib/e"
 )
 
 type Client struct {
@@ -22,8 +22,8 @@ const (
 	SendMessageMethod = "sendMessage"
 )
 
-func New(host string, token string) Client {
-	return Client{
+func New(host string, token string) *Client {
+	return &Client{
 		host:     host,
 		basePath: newBasePath(token),
 		client:   http.Client{},
@@ -36,7 +36,9 @@ func newBasePath(token string) string {
 
 }
 
-func (c *Client) Update(offset, int, limit int) ([]Update, error) {
+func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
+	defer func() { err = e.WrapIfErr("can't get updates", err) }()
+
 	q := url.Values{}
 	q.Add("offset", strconv.Itoa(offset))
 	q.Add("limit", strconv.Itoa(limit))
@@ -44,7 +46,6 @@ func (c *Client) Update(offset, int, limit int) ([]Update, error) {
 	data, err := c.doRequest(getUpdatesMethod, q)
 	if err != nil {
 		return nil, err
-
 	}
 
 	var res UpdatesResponse
@@ -54,7 +55,6 @@ func (c *Client) Update(offset, int, limit int) ([]Update, error) {
 	}
 
 	return res.Result, nil
-
 }
 
 func (c *Client) SendMessage(chatId int, text string) error {

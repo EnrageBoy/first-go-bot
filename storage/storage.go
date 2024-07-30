@@ -2,10 +2,11 @@ package storage
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"io"
 
-	"./../lib/e"
+	"Telegram_bot/lib/e"
 )
 
 type Storage interface {
@@ -14,6 +15,8 @@ type Storage interface {
 	Remove(p *Page) error
 	IsExists(p *Page) (bool, error)
 }
+
+var ErrNoSavedPages = errors.New("No saved pages")
 
 type Page struct {
 	URL      string
